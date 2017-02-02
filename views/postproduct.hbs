@@ -1,0 +1,402 @@
+<html lang="en">
+
+<title>{{title}}</title>
+  
+<link rel ='stylesheet' href='stylesheets/style.css' />
+  
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+  
+  
+  
+  
+<script>
+  
+    console.log("helloworld");
+  
+  
+  
+  
+    $(document).ready(function()
+    {
+
+		$(".productEditWindow").hide();
+
+		
+
+		
+   
+		
+		
+		
+	$.getJSON("/ajax",{operation:"getProducts"}).done(function(JSON){
+		
+		
+            //console.log("JSON data iss: " + JSON.currentPrice);
+            //console.log("JSON data isss: " + JSON[0].takingCash);
+            //console.log("JSON data iss: " + JSON);
+			
+            var arrayLength = JSON.length;
+            for (var i = 0; i < arrayLength; i++) {
+		
+                console.log("xx>> " + JSON[i]._id);
+				
+		$("#results").append('<b>ID: </b>' + JSON[i]._id + '  ' );
+		$("#results").append('<b>TAKING CASH: </b>' + JSON[i].takingCash + '   ' );
+		$("#results").append('<b>TAKING CREDIT: </b>' + JSON[i].takingCredit + '   ' );
+		$("#results").append('<b>CONDITION: </b>' + JSON[i].condition + '   ' );
+		$("#results").append('<b>COUNTRY: </b>' + JSON[i].country + '   ' );
+		$("#results").append('<b>NAME: </b>' + JSON[i].name + '   ' );
+		$("#results").append('<b>EMAIL: </b>' + JSON[i].email + '   ' );
+		$("#results").append('<b>OTHER COMMENTS: </b>' + JSON[i].othercomments + '   ' );
+        
+        
+        $("#results").append('<button class="productEditWindowEditButton" id=' + JSON[i]._id + '>Edit</button> ');
+		$("#results").append('<button id=' + JSON[i]._id + ' class= deleteButton>Delete</button> ');
+				
+		$("#results").append('<br> ');
+		$("#results").append('<br> ');
+				
+            }
+				
+            //$(".productEditWindow").attr(
+            $(".productEditWindowCancel").click(function(){
+			
+			
+		$(".productEditWindowCancel").parent().hide();
+				
+				
+				
+            })
+			
+
+
+
+
+            $(".productEditWindowEditButton").click(function(){
+			
+			
+		$(".productEditWindow").show();
+				
+		var newId = $(this).attr('id');
+				
+		console.log("ATRR: " + $(this).attr('id'));
+				
+		$(".productEditWindowSendButton").attr("id", newId);
+				
+				
+				
+		//$(".productEditWindowSendButton").attr("id", "testid");
+		//$(".productEditWindowSendButton").css("height", "500px");
+				
+		alert("click1");
+		$(".productEditWindowSendButton").click(function(){
+				
+				
+                    alert("click2");
+					
+				
+                    var takingCashEdit = $("#cashEdit").val();
+                    alert("var: " + takingCashEdit);
+                    var takingCreditEdit = $("#creditEdit").val();
+                    var conditionEdit = $("#conditionEdit").val();
+                    var countryEdit = $("#countryEdit").val();
+                    var nameEdit = $("#nameEdit").val();
+                    var emailEdit = $("#emailEdit").val();
+                    var otherCommentsEdit = $("#otherCommentsEdit").val();
+					
+					
+                    var operationEdit = "editProduct";
+                    var idToEdit = $(".productEditWindowSendButton").attr('id');
+					
+                    console.log("will edit id: " + idToEdit);
+					
+					
+					
+					
+					
+					
+					
+							
+                    var httpRequest = new XMLHttpRequest();
+				
+				
+                    if (!httpRequest) {
+						alert('Giving up :( Cannot create an XMLHTTP instance)');
+						return false;
+                    }
+				
+                    httpRequest.onreadystatechange = function(){
+				
+                        if (httpRequest.readyState === XMLHttpRequest.DONE) 
+                        {
+
+                            if (httpRequest.status === 200) 
+                            {
+                                alert(httpRequest.responseText); //if its json you call JSON parse to get a json object which is same as javascript object
+
+								location.reload();
+
+                            } 
+
+                            else 
+
+
+                            {
+
+                                alert('There was a problem with the request.');
+
+                            }
+                        }
+                    }
+				
+								
+                    httpRequest.open('POST', '/ajax', true);
+
+                    httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			
+                    httpRequest.send("operation=editProduct&id="+idToEdit+"&cashEdit="+takingCashEdit+"&creditEdit="+takingCreditEdit+"&conditionEdit="+conditionEdit+"&countryEdit="+countryEdit+"&nameEdit="+nameEdit+"&emailEdit="+emailEdit+"&otherCommentsEdit="+otherCommentsEdit); //post attributes here, id is a javascript variable appended
+				
+
+		})
+					
+				
+
+				
+				
+				
+            })
+			
+			
+			
+			
+			
+			
+			
+            $(".deleteButton").click(function() {
+			
+			
+			
+                //alert("clicked");
+                var httpRequest = new XMLHttpRequest();
+
+
+                if (!httpRequest) {
+                        alert('Giving up :( Cannot create an XMLHTTP instance');
+                        return false;
+                }
+				
+				
+				httpRequest.onreadystatechange = function(){
+				
+				
+                    if (httpRequest.readyState === XMLHttpRequest.DONE) 
+                    {
+
+                        if (httpRequest.status === 200) 
+                        {
+                            alert(httpRequest.responseText);
+                            
+                            location.reload();
+
+                        } 
+
+                        else 
+
+
+                        {
+
+                            alert('There was a problem with the request.');
+
+                        }
+                    }
+				
+				
+				};
+				
+                //httpRequest.open('POST', '/ajax', true);
+                httpRequest.open('POST', '/ajax', true);
+                //httpRequest.open('POST', 'http://requestb.in/11n43561', true);
+                //httpRequest.open('POST', 'localhost:3000', true);
+
+                //http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                //var params = "operationx=deleteProduct";
+                //httpRequest.send(params);
+
+                var id = $(this).attr('id');
+
+                httpRequest.send("operation=deleteProduct&id="+id);
+
+                //httpRequest.open('GET', '/ajax?operation=deleteProduct');
+                //httpRequest.send();
+
+
+			
+		
+			
+				
+            });
+			
+
+			
+            //$("#results").append('appended');			
+			
+			
+			
+			
+			
+			
+            /*
+            $.each(JSON.items, function(i, item) {
+
+                    //$("#result").append(JSON.stringify(item));
+
+                    console.log(JSON[i]._id);
+
+
+                    });
+            */
+			
+		
+			
+			
+			
+			
+			
+		
+	})
+		
+		
+
+		
+		
+
+                       
+        
+		
+		
+		
+		
+			  
+		  
+
+	 
+
+    });
+  
+</script>
+  
+
+  <body>
+    <h1>{{title}}</h1>
+    
+    	<form action="postproduct" method="post">
+    
+            Taking cash: <input type="checkbox" name="cash" id="cash" value="true">
+            <br>
+            Taking credit card: <input type="checkbox" name="credit" id="credit">
+            <br><br>
+            
+            Condition:
+            <br>
+            good <input type="radio" name="condition" value="good">
+            <br>
+            fair <input type="radio" name="condition" value="fair">
+            <br>
+            poor <input type="radio" name="condition" value="poor">
+            <br><br>
+            
+            Country of Location:
+            
+            <select name="country">
+                <option value="usa">usa</option>
+                <option value="Germany">Germany</option>
+            </select>    
+            <br><br>
+            
+            Seller Name: <input type="text" name="name">
+            <br>
+            Seller Email: <input type="text" name="email">
+            <br><br>
+            
+            Other Comments:
+            <br>
+            <textarea name="othercomments" rows="10" cols="30">
+            </textarea>
+            <br><br>
+            
+            <input type="submit" value="Submit">
+            
+        </form>   
+        
+        <div id="productEditWindow" class="productEditWindow">
+        
+        	<h2>Edit Your Product:</h2>
+   
+        
+        
+        
+         	Taking cash: <input type="checkbox" id="cashEdit" name="cashEdit" value="true">
+            <br>
+            Taking credit card: <input type="checkbox" id="creditEdit" name="creditEdit" >
+            <br><br>
+            
+            Condition:
+            <br>
+            good <input type="radio" id="conditionEdit" name="conditionEdit" value="good">
+            <br>
+            fair <input type="radio" id="conditionEdit" name="conditionEdit" value="fair">
+            <br>
+            poor <input type="radio" id="conditionEdit" name="conditionEdit" value="poor">
+            <br><br>
+            
+            Country of Location:
+            
+            <select id="countryEdit" name="countryEdit">
+                <option value="usa">usa</option>
+                <option value="Germany">Germany</option>
+            </select>    
+            <br><br>
+            
+            Seller Name: <input type="text" id="nameEdit" name="nameEdit">
+            <br>
+            Seller Email: <input type="text" id="emailEdit" name="emailEdit">
+            <br><br>
+            
+            Other Comments:
+            <br>
+            <textarea id= "otherCommentsEdit" name="otherCommentsEdit" rows="10" cols="30">
+            </textarea>
+            <br><br>
+       
+        
+        
+        
+        
+        	<button class="productEditWindowCancel" >Cancel</button> 
+        	
+        	<button class="productEditWindowSendButton">Send</button>
+        	
+        </div>      
+    
+    <hr />
+    <footer>
+      <small id="id1">Rendered by Handlebars</small>
+      <h2>Your Posted Products:</h2>
+       {{ products }} 
+       
+       <div id="results">
+       
+       </div>
+    <footer>
+  </body>
+<html>
